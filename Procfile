@@ -1,0 +1,1 @@
+web: Run serve --workdir="./"
