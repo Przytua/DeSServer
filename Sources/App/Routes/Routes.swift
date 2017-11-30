@@ -21,9 +21,9 @@ extension Droplet {
             return SoulsServerConfiguration.jpResponse
         }
         
-//        all("demons-souls-us/ss.info") { req in
-//            return "ameryka"
-//        }
+        all("demons-souls-us/ss.info") { req in
+            return SoulsServerConfiguration.usResponse
+        }
         
         all("*") { req in
             return self.redirect(req)
