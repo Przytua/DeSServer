@@ -1,0 +1,41 @@
+#extend("base")
+
+#export("title") { Logs }
+
+#export("head") {
+<style>
+table {border: solid 1px; border-collapse: collapse; table-layout: fixed; width: 100%;}
+thead tr th:first-child, tbody tr td:first-child {width: 20px; min-width: 10px; max-width: 30px; text-align: center;}
+table th {border: solid 1px;}
+table td {border: solid 1px; max-width: 20%;  word-wrap: break-word;}
+table td div {max-height: 100px; overflow: scroll;}
+</style>
+}
+
+#export("content") {
+
+<table class="table">
+<thead>
+<tr>
+<th>ID</th>
+<th>Endpoint</th>
+<th>Request Headers</th>
+<th>Request Body</th>
+<th>Response Headers</th>
+<th>Response Body</th>
+</tr>
+</thead>
+<tbody>
+#loop(logs, "log") {
+<tr>
+<td><a href="/requestLogs/#(log.id)">#(log.id)</a></td>
+<td><div>#(log.endpoint)</div></td>
+<td><div>#(log.request_headers)</div></td>
+<td><div>#(log.request_body)</div></td>
+<td><div>#(log.response_headers)</div></td>
+<td><div>#(log.response_body)</div></td>
+</tr>
+}
+</tbody>
+</table>
+}

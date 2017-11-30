@@ -52,6 +52,13 @@ let ssBase64Response = ssData!.base64EncodedString(options: .lineLength64Charact
 
 extension Droplet {
     func setupRoutes() throws {
+        try resource("requestLogs", RequestLogController.self)
+        
+        get("logs") { req in
+            let logs = try RequestLog.all().makeJSON()
+            return try self.view.make("logs", [ "logs": logs ])
+        }
+        
         get("demons-souls-eu/ss.info") { req in
             return ssResponse
         }
@@ -76,31 +83,31 @@ extension Droplet {
             return "ameryka"
         }
         
-        all("*") { req in
+        all("/cgi-bin/*") { req in
             return self.redirect(req)
         }
         
-        get("*") { req in
+        get("/cgi-bin/*") { req in
             return self.redirect(req)
         }
         
-        post("*") { req in
+        post("/cgi-bin/*") { req in
             return self.redirect(req)
         }
         
-        put("*") { req in
+        put("/cgi-bin/*") { req in
             return self.redirect(req)
         }
         
-        patch("*") { req in
+        patch("/cgi-bin/*") { req in
             return self.redirect(req)
         }
         
-        delete("*") { req in
+        delete("/cgi-bin/*") { req in
             return self.redirect(req)
         }
         
-        options("*") { req in
+        options("/cgi-bin/*") { req in
             return self.redirect(req)
         }
     }
@@ -116,30 +123,16 @@ extension Droplet {
                                       headers: redirectHeaders,
                                       body: request.body)
         let response = try! self.client.respond(to: redirectRequest)
-        var requestBody = ""
-        if let bytes = request.body.bytes {
-            let data = Data(bytes: bytes)
-            requestBody = data.map { String(format: "%02hhx", $0) }.joined()
+        let requestLog = RequestLog(endpoint: request.uri.path,
+                                    requestHeaders: String(describing: request.headers),
+                                    requestBody: request.body.bytes ?? [],
+                                    responseHeaders: String(describing: response.headers),
+                                    responseBody: response.body.bytes ?? [])
+        do {
+            try requestLog.save()
+        } catch let error {
+            self.log.error(error)
         }
-        var responseBody = ""
-        if let bytes = response.body.bytes {
-            let data = Data(bytes: bytes)
-            responseBody = data.map { String(format: "%02hhx", $0) }.joined()
-        }
-        self.log.info("""
-            ---------- REDIRECTED ----------
-            \(request)
-            ---------- BODY ----------
-            \(requestBody)
-            ---------- TO ----------
-            \(redirectRequest)
-            ---------- RESPONSE ----------
-            \(response)
-            ---------- BODY ----------
-            \(responseBody)
-            ---------- END OF REDIRECT ----------
-            
-            """)
         return response
     }
 }
