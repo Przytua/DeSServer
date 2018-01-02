@@ -80,10 +80,10 @@ extension RequestLog: Preparation {
     static func prepare(_ database: Database) throws {
         try database.create(self) { builder in
             builder.id()
-            builder.string(RequestLog.Keys.endpoint)
-            builder.string(RequestLog.Keys.requestHeaders)
+            builder.custom(RequestLog.Keys.endpoint, type: "TEXT")
+            builder.custom(RequestLog.Keys.requestHeaders, type: "TEXT")
             builder.bytes(RequestLog.Keys.requestBody)
-            builder.string(RequestLog.Keys.responseHeaders)
+            builder.custom(RequestLog.Keys.responseHeaders, type: "TEXT")
             builder.bytes(RequestLog.Keys.responseBody)
         }
     }
@@ -114,8 +114,9 @@ extension RequestLog: JSONConvertible {
         }
         
         var responseBodyBytes: [UInt8] = []
-        if let responseBody: String = try json.get(RequestLog.Keys.responseBody) {
-            responseBodyBytes = bytesArray(from: responseBody)
+        if let responseBody: String = try json.get(RequestLog.Keys.responseBody),
+            let responseData = responseBody.data(using: .utf8) {
+            responseBodyBytes = [UInt8](responseData)
         }
         
         self.init(
@@ -135,8 +136,9 @@ extension RequestLog: JSONConvertible {
         let requestBodyHexString = requestBody.map { String(format: "%02hhx", $0) }.joined()
         try json.set(RequestLog.Keys.requestBody, requestBodyHexString)
         try json.set(RequestLog.Keys.responseHeaders, responseHeaders)
-        let responseBodyHexString = responseBody.map { String(format: "%02hhx", $0) }.joined()
-        try json.set(RequestLog.Keys.responseBody, responseBodyHexString)
+        let responseData = Data(bytes: responseBody)
+        let responseBodyString = String(data: responseData, encoding: .utf8)
+        try json.set(RequestLog.Keys.responseBody, responseBodyString)
         return json
     }
 }

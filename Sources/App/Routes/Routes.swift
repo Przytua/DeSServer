@@ -2,6 +2,7 @@ import Vapor
 import Foundation
 
 let serverAddress = SoulsServerConfiguration.euServerAddress
+let pageSize = 100
 
 extension Droplet {
     
@@ -9,7 +10,16 @@ extension Droplet {
         try resource("requestLogs", RequestLogController.self)
         
         get("logs") { req in
-            let logs = try RequestLog.all().makeJSON()
+            return Response(redirect: "logs/1")
+        }
+        
+        get("logs", ":page") { req in
+            var page = 1
+            if let pageParam = req.parameters["page"]?.int {
+                page = pageParam
+            }
+            let offset = (page - 1) * pageSize
+            let logs = try RequestLog.makeQuery().limit(pageSize, offset: offset).all().makeJSON()
             return try self.view.make("logs", [ "logs": logs ])
         }
         

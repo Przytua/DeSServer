@@ -1,0 +1,7 @@
+{
+    "hostname": "127.0.0.1",
+    "user": "lukaszprzytula",
+    "password": "",
+    "database": "des",
+    "port": 5432
+}
