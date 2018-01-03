@@ -1,7 +1,7 @@
 import Vapor
 import Foundation
 
-let serverAddress = SoulsServerConfiguration.euServerAddress
+let serverAddress = SoulsServerConfiguration.usServerAddress
 let pageSize = 100
 
 extension Droplet {
