@@ -15,12 +15,19 @@ final class RequestLog: Model {
     var responseHeaders: String
     var responseBody: Bytes
     
+    var requestBodyDecrypted: String? {
+        get {
+            return Decryptor.sharedInstance.decrypt(requestBody)
+        }
+    }
+    
     /// The column names for `id` and `content` in the database
     struct Keys {
         static let id = "id"
         static let endpoint = "endpoint"
         static let requestHeaders = "request_headers"
         static let requestBody = "request_body"
+        static let requestBodyDecrypted = "request_body_decrypted"
         static let responseHeaders = "response_headers"
         static let responseBody = "response_body"
     }
@@ -135,6 +142,7 @@ extension RequestLog: JSONConvertible {
         try json.set(RequestLog.Keys.requestHeaders, requestHeaders)
         let requestBodyHexString = requestBody.map { String(format: "%02hhx", $0) }.joined()
         try json.set(RequestLog.Keys.requestBody, requestBodyHexString)
+        try json.set(RequestLog.Keys.requestBodyDecrypted, requestBodyDecrypted)
         try json.set(RequestLog.Keys.responseHeaders, responseHeaders)
         let responseData = Data(bytes: responseBody)
         let responseBodyString = String(data: responseData, encoding: .utf8)

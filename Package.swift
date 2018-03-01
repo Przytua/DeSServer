@@ -13,9 +13,10 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-provider.git", .upToNextMajor(from: "1.2.0")),
         .package(url: "https://github.com/vapor/leaf-provider.git", .upToNextMajor(from: "1.1.0")),
         .package(url: "https://github.com/vapor/postgresql-provider.git", .upToNextMajor(from: "2.0.0")),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", .upToNextMajor(from: "0.8.3")),
     ],
     targets: [
-        .target(name: "App", dependencies: ["Vapor", "FluentProvider", "LeafProvider", "PostgreSQLProvider"],
+        .target(name: "App", dependencies: ["Vapor", "FluentProvider", "LeafProvider", "PostgreSQLProvider", "CryptoSwift"],
                 exclude: [
                     "Config",
                     "Public",
@@ -25,4 +26,3 @@ let package = Package(
         .testTarget(name: "AppTests", dependencies: ["App", "Testing"])
     ]
 )
-
