@@ -42,6 +42,26 @@ extension Droplet {
         get("favicon.ico") { req in
             return try Response(filePath: "\(self.config.publicDir)/favicon.ico")
         }
+        
+        all("cgi-bin/login.spd") { req in
+            var responseData: Data = Data(bytes: [1, 244, 2, 0, 0, 1, 1])
+            let message = "Custom message"
+            responseData.append(message.data(using: .utf8)!)
+            
+            return self.createResponse(with: responseData)
+        }
+        
+        all("cgi-bin/getQWCData.spd") { req in
+            let bytes: [UInt8]
+            let pureBlack = false
+            if (pureBlack) {
+                bytes = [14, 61, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // PBWT
+            } else {
+                bytes = [14, 61, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // PWWT
+            }
+            let data = Data(bytes: bytes)
+            return self.createResponse(with: data)
+        }
     }
     
     func redirect(_ request: Request) -> Response {
@@ -54,7 +74,9 @@ extension Droplet {
                                       uri: redirectAddress,
                                       headers: redirectHeaders,
                                       body: request.body)
-        let response = try! self.client.respond(to: redirectRequest)
+        guard let response = try? self.client.respond(to: redirectRequest) else {
+            return Response(status: .forbidden)
+        }
         let requestLog = RequestLog(endpoint: request.uri.path,
                                     requestHeaders: String(describing: request.headers),
                                     requestBody: request.body.bytes ?? [],
@@ -66,6 +88,17 @@ extension Droplet {
             self.log.error(error)
         }
         return response
+    }
+    
+    func createResponse(with data: Data) -> Response {
+        var base64Data = data.base64EncodedData()
+        base64Data.append([0x0a], count: 1)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "GMT")
+        dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss 'GMT'"
+        let formattedDate = dateFormatter.string(from: Date())
+        return Response(status: .ok, headers: ["Date": formattedDate, "Connection": "close", "Content-Type": "text/html; charset=UTF-8", "Server": "Apache"], body: base64Data)
     }
 }
 
