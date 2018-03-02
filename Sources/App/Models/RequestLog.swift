@@ -21,6 +21,18 @@ final class RequestLog: Model {
         }
     }
     
+    var responseBodyDecoded: String? {
+        get {
+            return responseBody.base64Decoded.map { String(format: "%c", $0) }.joined()
+        }
+    }
+    
+    var responseBodyDecodedHex: String? {
+        get {
+            return responseBody.base64Decoded.map { String(format: "%02x ", $0) }.joined()
+        }
+    }
+    
     /// The column names for `id` and `content` in the database
     struct Keys {
         static let id = "id"
@@ -30,6 +42,8 @@ final class RequestLog: Model {
         static let requestBodyDecrypted = "request_body_decrypted"
         static let responseHeaders = "response_headers"
         static let responseBody = "response_body"
+        static let responseBodyDecoded = "response_body_decoded"
+        static let responseBodyDecodedHex = "response_body_decoded_hex"
     }
 
     /// Creates a new RequestLog
@@ -147,6 +161,8 @@ extension RequestLog: JSONConvertible {
         let responseData = Data(bytes: responseBody)
         let responseBodyString = String(data: responseData, encoding: .utf8)
         try json.set(RequestLog.Keys.responseBody, responseBodyString)
+        try json.set(RequestLog.Keys.responseBodyDecoded, responseBodyDecoded)
+        try json.set(RequestLog.Keys.responseBodyDecodedHex, responseBodyDecodedHex)
         return json
     }
 }

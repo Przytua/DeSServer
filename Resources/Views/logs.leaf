@@ -22,7 +22,8 @@ table td div {max-height: 100px; overflow: scroll;}
 <th>Request Headers</th>
 <th>Request Body Decrypted</th>
 <th>Response Headers</th>
-<th>Response Body</th>
+<th>Response Body Decoded</th>
+<th>Response Body Decoded Hex</th>
 </tr>
 </thead>
 <tbody>
@@ -33,7 +34,8 @@ table td div {max-height: 100px; overflow: scroll;}
 <td><div>#(log.request_headers)</div></td>
 <td><div>#(log.request_body_decrypted)</div></td>
 <td><div>#(log.response_headers)</div></td>
-<td><div>#(log.response_body)</div></td>
+<td><div>#(log.response_body_decoded)</div></td>
+<td><div>#(log.response_body_decoded_hex)</div></td>
 </tr>
 }
 </tbody>
