@@ -77,12 +77,7 @@ final class RequestLogController: ResourceRepresentable {
     func makeResource() -> Resource<RequestLog> {
         return Resource(
             index: index,
-            store: store,
-            show: show,
-            update: update,
-            replace: replace,
-            destroy: delete,
-            clear: clear
+            show: show
         )
     }
 }
