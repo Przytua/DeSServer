@@ -11,6 +11,7 @@ extension Droplet {
         let redirectController = RedirectController(client: client, log: log)
         let infoController = InfoController()
         let loginController = LoginController(redirectController: redirectController)
+        let messagesController = MessagesController(redirectController: redirectController)
         
         try resource("requestLogs", RequestLogController.self)
         get("logs", handler: logsViewController.logsRedirect)
@@ -27,6 +28,8 @@ extension Droplet {
         
         all("cgi-bin/login.spd", handler: loginController.login)
         all("cgi-bin/getQWCData.spd", handler: loginController.getQWCData)
+        
+        all("cgi-bin/addBloodMessage.spd", handler: messagesController.addBloodMessage)
     }
 }
 

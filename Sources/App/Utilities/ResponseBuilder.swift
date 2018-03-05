@@ -10,7 +10,11 @@ import Foundation
 
 class ResponseBuilder {
     
-    func response(with data: Data) -> Response {
+    func response(command: UInt8, body: Data) -> Response {
+        var data = Data(bytes: [command])
+        let dataLength = toData(from: UInt32(body.count + 5))
+        data.append(dataLength)
+        data.append(body)
         var base64Data = data.base64EncodedData()
         base64Data.append([0x0a], count: 1)
         

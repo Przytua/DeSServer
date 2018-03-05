@@ -23,5 +23,6 @@ extension Config {
     /// schemas prepared before the app boots
     private func setupPreparations() throws {
         preparations.append(RequestLog.self)
+        preparations.append(BloodMessage.self)
     }
 }
