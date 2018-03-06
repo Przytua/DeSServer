@@ -12,6 +12,7 @@ extension Droplet {
         let infoController = InfoController()
         let loginController = LoginController(redirectController: redirectController)
         let messagesController = MessagesController(redirectController: redirectController)
+        let ghostsController = GhostsController(redirectController: redirectController, log: log)
         
         try resource("requestLogs", RequestLogController.self)
         get("logs", handler: logsViewController.logsRedirect)
@@ -30,6 +31,13 @@ extension Droplet {
         all("cgi-bin/getQWCData.spd", handler: loginController.getQWCData)
         
         all("cgi-bin/addBloodMessage.spd", handler: messagesController.addBloodMessage)
+        all("cgi-bin/getBloodMessage.spd", handler: messagesController.getBloodMessage)
+        all("cgi-bin/deleteBloodMessage.spd", handler: messagesController.deleteBloodMessage)
+        all("cgi-bin/updateBloodMessageGrade.spd", handler: messagesController.updateBloodMessageGrade)
+        all("cgi-bin/getBloodMessageGrade.spd", handler: messagesController.getBloodMessageGrade)
+        
+        all("cgi-bin/setWanderingGhost.spd", handler: ghostsController.setWanderingGhost)
+        all("cgi-bin/getWanderingGhost.spd", handler: ghostsController.getWanderingGhost)
     }
 }
 

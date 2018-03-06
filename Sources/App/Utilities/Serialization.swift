@@ -17,12 +17,12 @@ func toData<T>(from value: T) -> Data {
 func toDictionary(from parameters: String) -> [String: String] {
     var dictionary: [String: String] = [:]
     for param in parameters.split(separator: "&") {
-        let nameAndValue = param.split(separator: "=")
-        if (nameAndValue.count == 2) {
-            let name = nameAndValue[0]
-            let value = nameAndValue[1]
-            dictionary[String(name)] = String(value)
+        guard let index = param.index(of: "=") else {
+            continue
         }
+        let name = String(param[param.startIndex..<index])
+        let value = String(param[param.index(after: index)..<param.endIndex])
+        dictionary[String(name)] = String(value)
     }
     
     return dictionary

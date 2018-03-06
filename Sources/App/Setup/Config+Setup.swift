@@ -24,5 +24,6 @@ extension Config {
     private func setupPreparations() throws {
         preparations.append(RequestLog.self)
         preparations.append(BloodMessage.self)
+        preparations.append(WanderingGhost.self)
     }
 }
