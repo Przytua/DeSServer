@@ -8,10 +8,10 @@ This is a Demon's Souls game server written in [Swift/Vapor](https://vapor.codes
 * World tendency (currently hardcoded to pure white)
 * Messages
 * Players wandering ghosts
+* Bloodstains
 
 #### Todo's
 
-* Bloodstains
 * Coop/PVP matchmaking
 * Players management (banning, etc.)
 

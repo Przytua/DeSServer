@@ -15,6 +15,8 @@ class GhostsController {
     let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
     let log: LogProtocol
+    let base64Mender = Base64Mender()
+    let replayDataValidator = ReplayDataValidator()
     
     init(redirectController: RedirectController, log: LogProtocol) {
         self.redirectController = redirectController
@@ -34,8 +36,8 @@ class GhostsController {
             return Response(status: .badRequest)
         }
         
-        let fixedReplayData = fix(replayData: replayData)
-        guard validate(replayData: fixedReplayData) else {
+        let fixedReplayData = base64Mender.fix(replayData: replayData)
+        guard replayDataValidator.validate(replayData: fixedReplayData) else {
             return responseBuilder.response(command: 0x17, body: Data(bytes: [0x01]))
         }
         dictionary["replayData"] = fixedReplayData
@@ -69,12 +71,14 @@ class GhostsController {
             self.cleanupOldGhosts()
         }
         
-        let ghosts = try WanderingGhost.makeQuery()
-            .filter("ghostBlockID", .equals, blockID)
-            .filter("characterID", .notEquals, characterID)
-            .filter("timestamp", .greaterThanOrEquals, oldestTimestamp)
-            .limit(Int(maxGhostNum))
-            .all()
+        guard let ghosts = try? WanderingGhost.makeQuery()
+              .filter("ghostBlockID", .equals, blockID)
+              .filter("characterID", .notEquals, characterID)
+              .filter("timestamp", .greaterThanOrEquals, oldestTimestamp)
+              .limit(Int(maxGhostNum))
+              .all() else {
+            return responseBuilder.response(command: 0x11, body: toData(from: UInt32(0)))
+        }
         
         var responseData = Data()
         responseData.append(toData(from: UInt32(0)))
@@ -86,42 +90,6 @@ class GhostsController {
         }
         
         return responseBuilder.response(command: 0x11, body: responseData)
-    }
-    
-    func fix(replayData: String) -> String {
-        var fixedReplayData = ""
-        for c in replayData {
-            if "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz/+".contains(c) {
-                fixedReplayData += String(c)
-            } else if c == " " {
-                fixedReplayData += "+"
-            } else {
-                break
-            }
-        }
-        
-        if fixedReplayData.count % 4 == 3 {
-            return fixedReplayData + "="
-        } else if fixedReplayData.count % 4 == 2 {
-            return fixedReplayData + "=="
-        } else if fixedReplayData.count % 4 == 1 {
-            return fixedReplayData + "A=="
-        }
-        return fixedReplayData
-    }
-    
-    func validate(replayData: String) -> Bool {
-        guard let decoded = Data(base64Encoded: replayData, options: .ignoreUnknownCharacters),
-              let uncompressed = try? decoded.gunzipped() else {
-            return false
-        }
-        var posCount: UInt32 = uncompressed[0...3].withUnsafeBytes { $0.pointee }
-        posCount = UInt32(bigEndian: posCount)
-        let beginning = 12 + (Int(posCount) * 32) + 80
-        let end = uncompressed.count
-        let playername = String(data: Data(uncompressed[beginning..<end]), encoding: .utf16BigEndian)
-        let expectedDataLength = 12 + (Int(posCount) * 32) + (4 * 20) + 34
-        return uncompressed.count == expectedDataLength
     }
     
     func cleanupOldGhosts() {

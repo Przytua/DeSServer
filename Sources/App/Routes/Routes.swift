@@ -13,6 +13,7 @@ extension Droplet {
         let loginController = LoginController(redirectController: redirectController)
         let messagesController = MessagesController(redirectController: redirectController)
         let ghostsController = GhostsController(redirectController: redirectController, log: log)
+        let replayController = ReplayController(redirectController: redirectController, log: log)
         
         try resource("requestLogs", RequestLogController.self)
         get("logs", handler: logsViewController.logsRedirect)
@@ -38,6 +39,10 @@ extension Droplet {
         
         all("cgi-bin/setWanderingGhost.spd", handler: ghostsController.setWanderingGhost)
         all("cgi-bin/getWanderingGhost.spd", handler: ghostsController.getWanderingGhost)
+        
+        all("cgi-bin/addReplayData.spd", handler: replayController.addReplayData)
+        all("cgi-bin/getReplayList.spd", handler: replayController.getReplayList)
+        all("cgi-bin/getReplayData.spd", handler: replayController.getReplayData)
     }
 }
 

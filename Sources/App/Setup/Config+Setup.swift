@@ -25,5 +25,6 @@ extension Config {
         preparations.append(RequestLog.self)
         preparations.append(BloodMessage.self)
         preparations.append(WanderingGhost.self)
+        preparations.append(Replay.self)
     }
 }
