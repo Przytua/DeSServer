@@ -26,5 +26,6 @@ extension Config {
         preparations.append(BloodMessage.self)
         preparations.append(WanderingGhost.self)
         preparations.append(Replay.self)
+        preparations.append(WorldTendency.self)
     }
 }

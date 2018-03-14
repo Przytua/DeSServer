@@ -11,10 +11,12 @@ extension Droplet {
         let redirectController = RedirectController(client: client, log: log)
         let infoController = InfoController()
         let loginController = LoginController(redirectController: redirectController)
+        let worldTendencyController = WorldTendencyController(redirectController: redirectController)
         let messagesController = MessagesController(redirectController: redirectController)
         let ghostsController = GhostsController(redirectController: redirectController, log: log)
         let replayController = ReplayController(redirectController: redirectController, log: log)
         
+        get("/", handler: logsViewController.logsRedirect)
         try resource("requestLogs", RequestLogController.self)
         get("logs", handler: logsViewController.logsRedirect)
         get("logs", ":page", handler: logsViewController.logs)
@@ -29,7 +31,9 @@ extension Droplet {
         all("demons-souls-us/ss.info", handler: infoController.us)
         
         all("cgi-bin/login.spd", handler: loginController.login)
-        all("cgi-bin/getQWCData.spd", handler: loginController.getQWCData)
+        
+        all("cgi-bin/addQWCData.spd", handler: worldTendencyController.addQWCData)
+        all("cgi-bin/getQWCData.spd", handler: worldTendencyController.getQWCData)
         
         all("cgi-bin/addBloodMessage.spd", handler: messagesController.addBloodMessage)
         all("cgi-bin/getBloodMessage.spd", handler: messagesController.getBloodMessage)
