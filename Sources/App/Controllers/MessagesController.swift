@@ -65,7 +65,7 @@ class MessagesController {
         let dictionary = toDictionary(from: requestData)
         
         guard let blockIDString = dictionary["blockID"],
-              let blockID = UInt32(blockIDString),
+              let blockID = Int32(blockIDString),
               let replayNumString = dictionary["replayNum"],
               var limit = Int(replayNumString),
               let characterID = dictionary["characterID"] else {

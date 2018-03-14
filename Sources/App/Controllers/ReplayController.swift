@@ -56,7 +56,7 @@ class ReplayController {
         let dictionary = toDictionary(from: requestData)
         
         guard let blockIDString = dictionary["blockID"],
-              let blockID = UInt32(blockIDString),
+              let blockID = Int32(blockIDString),
               let replayNumString = dictionary["replayNum"],
               let limit = Int(replayNumString) else {
             return Response(status: .badRequest)
@@ -64,7 +64,7 @@ class ReplayController {
         
         guard let replays = try? Replay.makeQuery()
               .filter("blockID", .equals, blockID)
-              .sort("rating", .descending)
+              .sort("id", .descending)
               .limit(limit)
               .all() else {
             return responseBuilder.response(command: 0x1f, body: toData(from: UInt32(0)))

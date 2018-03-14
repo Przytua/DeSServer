@@ -22,8 +22,19 @@ func toDictionary(from parameters: String) -> [String: String] {
         }
         let name = String(param[param.startIndex..<index])
         let value = String(param[param.index(after: index)..<param.endIndex])
-        dictionary[String(name)] = String(value)
+        dictionary[name] = normalizeValue(value, parameterName: name)
     }
     
     return dictionary
+}
+
+func normalizeValue(_ value: String, parameterName: String) -> String {
+    guard parameterName == "blockID" || parameterName == "ghostBlockID" else {
+        return value
+    }
+    let blockID = Int64(value)!
+    if blockID > (1 << 31) {
+        return String(blockID - (1 << 32))
+    }
+    return value
 }
