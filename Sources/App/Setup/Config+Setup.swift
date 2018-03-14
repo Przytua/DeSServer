@@ -29,5 +29,6 @@ extension Config {
         preparations.append(WorldTendency.self)
         preparations.append(Player.self)
         preparations.append(ServerSetting.self)
+        preparations.append(SOSData.self)
     }
 }

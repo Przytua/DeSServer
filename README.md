@@ -9,10 +9,10 @@ This is a Demon's Souls game server written in [Swift/Vapor](https://vapor.codes
 * Messages
 * Players wandering ghosts
 * Bloodstains
+* Coop/PVP matchmaking
 
 #### Todo's
 
-* Coop/PVP matchmaking
 * Players management (banning, etc.)
 
 ## Deployment
