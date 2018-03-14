@@ -32,6 +32,7 @@ extension Droplet {
         all("demons-souls-us/ss.info", handler: infoController.us)
         
         all("cgi-bin/login.spd", handler: loginController.login)
+        all("cgi-bin/getTimeMessage.spd", handler: loginController.getTimeMessage)
         
         all("cgi-bin/initializeCharacter.spd", handler: playersController.initializeCharacter)
         all("cgi-bin/getMultiPlayGrade.spd", handler: playersController.getMultiPlayGrade)
