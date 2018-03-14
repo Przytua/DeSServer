@@ -13,9 +13,11 @@ class MessagesController {
     let decryptor = Decryptor()
     let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
+    let playersController: PlayersController
     
-    init(redirectController: RedirectController) {
+    init(redirectController: RedirectController, playersController: PlayersController) {
         self.redirectController = redirectController
+        self.playersController = playersController
     }
     
     func addBloodMessage(_ request: Request) throws -> Response {
@@ -47,8 +49,8 @@ class MessagesController {
             return Response(status: .badRequest)
         }
         
-        bloodMessage.rating += 1
-        try bloodMessage.save()
+        try BloodMessage.database?.raw("UPDATE blood_messages SET \(BloodMessage.Keys.rating) = \(BloodMessage.Keys.rating) + 1 WHERE \(BloodMessage.Keys.id) = \(bmID)")
+        try playersController.updateBloodMessageGrade(characterID: bloodMessage.characterID)
         
         return responseBuilder.response(command: 0x2a, body: Data(bytes: [0x01]))
     }
@@ -128,6 +130,6 @@ class MessagesController {
             return Response(status: .internalServerError)
         }
         responseData.append(toData(from: UInt32(ratings)))
-        return responseBuilder.response(command: 0x29, body: Data(bytes: [0x01]))
+        return responseBuilder.response(command: 0x29, body: responseData)
     }
 }

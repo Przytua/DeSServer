@@ -11,8 +11,9 @@ extension Droplet {
         let redirectController = RedirectController(client: client, log: log)
         let infoController = InfoController()
         let loginController = LoginController(redirectController: redirectController)
+        let playersController = PlayersController(redirectController: redirectController)
         let worldTendencyController = WorldTendencyController(redirectController: redirectController)
-        let messagesController = MessagesController(redirectController: redirectController)
+        let messagesController = MessagesController(redirectController: redirectController, playersController: playersController)
         let ghostsController = GhostsController(redirectController: redirectController, log: log)
         let replayController = ReplayController(redirectController: redirectController, log: log)
         
@@ -32,6 +33,13 @@ extension Droplet {
         
         all("cgi-bin/login.spd", handler: loginController.login)
         
+        all("cgi-bin/initializeCharacter.spd", handler: playersController.initializeCharacter)
+        all("cgi-bin/getMultiPlayGrade.spd", handler: playersController.getMultiPlayGrade)
+        all("cgi-bin/getBloodMessageGrade.spd", handler: playersController.getBloodMessageGrade)
+        all("cgi-bin/initializeMultiPlay.spd", handler: playersController.initializeMultiPlay)
+        all("cgi-bin/finalizeMultiPlay.spd", handler: playersController.finalizeMultiPlay)
+        all("cgi-bin/updateOtherPlayerGrade.spd", handler: playersController.updateOtherPlayerGrade)
+        
         all("cgi-bin/addQWCData.spd", handler: worldTendencyController.addQWCData)
         all("cgi-bin/getQWCData.spd", handler: worldTendencyController.getQWCData)
         
@@ -39,7 +47,6 @@ extension Droplet {
         all("cgi-bin/getBloodMessage.spd", handler: messagesController.getBloodMessage)
         all("cgi-bin/deleteBloodMessage.spd", handler: messagesController.deleteBloodMessage)
         all("cgi-bin/updateBloodMessageGrade.spd", handler: messagesController.updateBloodMessageGrade)
-        all("cgi-bin/getBloodMessageGrade.spd", handler: messagesController.getBloodMessageGrade)
         
         all("cgi-bin/setWanderingGhost.spd", handler: ghostsController.setWanderingGhost)
         all("cgi-bin/getWanderingGhost.spd", handler: ghostsController.getWanderingGhost)

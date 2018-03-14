@@ -1,8 +1,8 @@
 //
-//  ReplayController.swift
+//  WorldTendencyController.swift
 //  App
 //
-//  Created by Łukasz Przytuła on 13.03.2018.
+//  Created by Łukasz Przytuła on 14.03.2018.
 //
 
 import Foundation
