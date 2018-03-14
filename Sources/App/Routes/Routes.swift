@@ -22,6 +22,8 @@ extension Droplet {
         get("logs", handler: logsViewController.logsRedirect)
         get("logs", ":page", handler: logsViewController.logs)
         
+        try resource("serverSettings", ServerSettingController.self)
+        
         all("*", handler: redirectController.redirect)
         get("favicon.ico") { req in
             return try Response(filePath: "\(self.config.publicDir)/favicon.ico")

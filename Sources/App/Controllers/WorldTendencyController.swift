@@ -12,6 +12,7 @@ class WorldTendencyController {
     let decryptor = Decryptor()
     let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
+    let serverSettings = ServerSettings()
     
     let pwwtData = Data(bytes: [0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     let pbwtData = Data(bytes: [0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
@@ -37,6 +38,10 @@ class WorldTendencyController {
     
     func getQWCData(_ request: Request) throws -> Response {
         _ = redirectController.redirect(request)
+        
+        if let staticTendency = serverSettings.worldTendency {
+            return responseBuilder.response(command: 0x0e, body: staticTendency)
+        }
         
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {

@@ -27,5 +27,7 @@ extension Config {
         preparations.append(WanderingGhost.self)
         preparations.append(Replay.self)
         preparations.append(WorldTendency.self)
+        preparations.append(Player.self)
+        preparations.append(ServerSetting.self)
     }
 }

@@ -105,6 +105,12 @@ extension WanderingGhost: Preparation {
     }
 }
 
+// MARK: HTTP
+
+// This allows WanderingGhost models to be returned
+// directly in route closures
+extension WanderingGhost: ResponseRepresentable { }
+
 // MARK: JSON
 
 // How the model converts from / to JSON.
