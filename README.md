@@ -14,6 +14,7 @@ This is a Demon's Souls game server written in [Swift/Vapor](https://vapor.codes
 #### Todo's
 
 * Players management (banning, etc.)
+* Server configuration
 
 ## Deployment
 

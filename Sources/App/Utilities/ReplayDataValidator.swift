@@ -18,7 +18,7 @@ class ReplayDataValidator {
         posCount = UInt32(bigEndian: posCount)
         let beginning = 12 + (Int(posCount) * 32) + 80
         let end = uncompressed.count
-        let playername = String(data: Data(uncompressed[beginning..<end]), encoding: .utf16BigEndian)
+        _ = String(data: Data(uncompressed[beginning..<end]), encoding: .utf16BigEndian)
         let expectedDataLength = 12 + (Int(posCount) * 32) + (4 * 20) + 34
         return uncompressed.count == expectedDataLength
     }

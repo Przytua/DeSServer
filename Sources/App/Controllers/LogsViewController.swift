@@ -11,6 +11,7 @@ import Foundation
 class LogsViewController {
     
     public let viewRenderer: ViewRenderer
+    let pageSize = 100
     
     init(viewRenderer: ViewRenderer) {
         self.viewRenderer = viewRenderer

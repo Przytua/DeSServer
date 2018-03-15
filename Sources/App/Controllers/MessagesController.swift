@@ -11,18 +11,16 @@ import Foundation
 class MessagesController {
     
     let decryptor = Decryptor()
-    let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
+    let log: LogProtocol
     let playersController: PlayersController
     
-    init(redirectController: RedirectController, playersController: PlayersController) {
-        self.redirectController = redirectController
+    init(log: LogProtocol, playersController: PlayersController) {
+        self.log = log
         self.playersController = playersController
     }
     
     func addBloodMessage(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -35,8 +33,6 @@ class MessagesController {
     }
     
     func updateBloodMessageGrade(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -56,8 +52,6 @@ class MessagesController {
     }
     
     func getBloodMessage(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -93,8 +87,6 @@ class MessagesController {
     }
     
     func deleteBloodMessage(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -113,8 +105,6 @@ class MessagesController {
     }
     
     func getBloodMessageGrade(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
             let requestData = decryptor.decrypt(body) else {
                 return Response(status: .badRequest)

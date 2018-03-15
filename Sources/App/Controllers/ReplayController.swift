@@ -10,20 +10,16 @@ import Foundation
 class ReplayController {
     
     let decryptor = Decryptor()
-    let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
     let log: LogProtocol
     let base64Mender = Base64Mender()
     let replayBinaryValidator = ReplayDataValidator()
     
-    init(redirectController: RedirectController, log: LogProtocol) {
-        self.redirectController = redirectController
+    init(log: LogProtocol) {
         self.log = log
     }
     
     func addReplayData(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
             let requestData = decryptor.decrypt(body) else {
                 return Response(status: .badRequest)
@@ -47,8 +43,6 @@ class ReplayController {
     }
     
     func getReplayList(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -80,8 +74,6 @@ class ReplayController {
     }
     
     func getReplayData(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
             let requestData = decryptor.decrypt(body) else {
                 return Response(status: .badRequest)

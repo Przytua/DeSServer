@@ -12,20 +12,18 @@ import Gzip
 class GhostsController {
     
     let decryptor = Decryptor()
-    let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
     let log: LogProtocol
     let base64Mender = Base64Mender()
     let replayDataValidator = ReplayDataValidator()
     
-    init(redirectController: RedirectController, log: LogProtocol) {
-        self.redirectController = redirectController
+    let oldGhostsTimeInterval: TimeInterval = -TimeInterval(wanderingGhostInterval)
+    
+    init(log: LogProtocol) {
         self.log = log
     }
     
     func setWanderingGhost(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -49,9 +47,7 @@ class GhostsController {
     }
     
     func getWanderingGhost(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
-        let oldestTimestamp = Date(timeIntervalSinceNow: -30)
+        let oldestTimestamp = Date(timeIntervalSinceNow: oldGhostsTimeInterval)
         
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
@@ -93,7 +89,7 @@ class GhostsController {
     }
     
     func cleanupOldGhosts() {
-        let oldestTimestamp = Date(timeIntervalSinceNow: -30)
+        let oldestTimestamp = Date(timeIntervalSinceNow: oldGhostsTimeInterval)
         do {
             try WanderingGhost.makeQuery()
                 .filter("timestamp", .lessThan, oldestTimestamp)
