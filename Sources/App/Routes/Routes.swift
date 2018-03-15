@@ -5,7 +5,7 @@ extension Droplet {
     
     func setupRoutes() throws {
         let logsViewController = LogsViewController(viewRenderer: view)
-        let infoController = InfoController()
+        let infoController = InfoController(config: config)
         let loginController = LoginController(log: log)
         let playersController = PlayersController(log: log)
         let worldTendencyController = WorldTendencyController(log: log)
