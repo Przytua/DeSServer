@@ -22,6 +22,7 @@ final class WanderingGhost: Model {
     var posy: Float32
     var posz: Float32
     var replayData: String
+    var port: Int
     var timestamp: Date
     
     /// The column names for `id` and `content` in the database
@@ -33,6 +34,7 @@ final class WanderingGhost: Model {
         static let posy = "posy"
         static let posz = "posz"
         static let replayData = "replayData"
+        static let port = "port"
         static let timestamp = "timestamp"
     }
     
@@ -43,6 +45,7 @@ final class WanderingGhost: Model {
          posy: Float32,
          posz: Float32,
          replayData: String,
+         port: Int = 0,
          timestamp: Date = Date()) {
         self.characterID = characterID
         self.ghostBlockID = ghostBlockID
@@ -50,6 +53,7 @@ final class WanderingGhost: Model {
         self.posy = posy
         self.posz = posz
         self.replayData = replayData
+        self.port = port
         self.timestamp = timestamp
     }
     
@@ -64,6 +68,7 @@ final class WanderingGhost: Model {
         posy = try row.get(WanderingGhost.Keys.posy)
         posz = try row.get(WanderingGhost.Keys.posz)
         replayData = try row.get(WanderingGhost.Keys.replayData)
+        port = try row.get(WanderingGhost.Keys.port)
         timestamp = try row.get(WanderingGhost.Keys.timestamp)
     }
     
@@ -76,6 +81,7 @@ final class WanderingGhost: Model {
         try row.set(WanderingGhost.Keys.posy, posy)
         try row.set(WanderingGhost.Keys.posz, posz)
         try row.set(WanderingGhost.Keys.replayData, replayData)
+        try row.set(WanderingGhost.Keys.port, port)
         try row.set(WanderingGhost.Keys.timestamp, timestamp)
         return row
     }
@@ -95,6 +101,7 @@ extension WanderingGhost: Preparation {
             builder.double(WanderingGhost.Keys.posy)
             builder.double(WanderingGhost.Keys.posz)
             builder.custom(WanderingGhost.Keys.replayData, type: "TEXT")
+            builder.int(WanderingGhost.Keys.port)
             builder.date(WanderingGhost.Keys.timestamp)
         }
     }
@@ -127,6 +134,7 @@ extension WanderingGhost: JSONConvertible {
             posy: try json.get(WanderingGhost.Keys.posy),
             posz: try json.get(WanderingGhost.Keys.posz),
             replayData: try json.get(WanderingGhost.Keys.replayData),
+            port: try json.get(WanderingGhost.Keys.port),
             timestamp: try json.get(WanderingGhost.Keys.timestamp)
         )
     }
@@ -140,6 +148,7 @@ extension WanderingGhost: JSONConvertible {
         try json.set(WanderingGhost.Keys.posy, posy)
         try json.set(WanderingGhost.Keys.posz, posz)
         try json.set(WanderingGhost.Keys.replayData, replayData)
+        try json.set(WanderingGhost.Keys.port, port)
         try json.set(WanderingGhost.Keys.timestamp, timestamp)
         return json
     }

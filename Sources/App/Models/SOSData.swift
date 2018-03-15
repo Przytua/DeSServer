@@ -280,6 +280,7 @@ extension SOSData: JSONConvertible {
         try json.set(SOSData.Keys.qwclr, qwclr)
         try json.set(SOSData.Keys.isBlack, isBlack)
         try json.set(SOSData.Keys.playerLevel, playerLevel)
+        try json.set(SOSData.Keys.port, port)
         try json.set(SOSData.Keys.timestamp, timestamp)
         try json.set(SOSData.Keys.gradeS, gradeS)
         try json.set(SOSData.Keys.gradeA, gradeA)

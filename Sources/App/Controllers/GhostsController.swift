@@ -23,6 +23,8 @@ class GhostsController {
     }
     
     func setWanderingGhost(_ request: Request) throws -> Response {
+        let port = Int(request.uri.port!)
+        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -40,6 +42,7 @@ class GhostsController {
         dictionary["replayData"] = fixedReplayData
         
         let wanderingGhost = WanderingGhost(dictionary: dictionary)
+        wanderingGhost.port = port
         try? wanderingGhost.save()
         
         return responseBuilder.response(command: 0x17, body: Data(bytes: [0x01]))
@@ -63,7 +66,7 @@ class GhostsController {
         }
         
         background {
-            self.cleanupOldGhosts()
+            self.cleanupOldGhosts(oldestTimestamp)
         }
         
         guard let ghosts = try? WanderingGhost.makeQuery()
@@ -71,7 +74,8 @@ class GhostsController {
               .filter("characterID", .notEquals, characterID)
               .filter("timestamp", .greaterThanOrEquals, oldestTimestamp)
               .limit(Int(maxGhostNum))
-              .all() else {
+              .all(),
+              ghosts.count > 0 else {
             return responseBuilder.response(command: 0x11, body: toData(from: UInt32(0)))
         }
         
@@ -87,8 +91,7 @@ class GhostsController {
         return responseBuilder.response(command: 0x11, body: responseData)
     }
     
-    func cleanupOldGhosts() {
-        let oldestTimestamp = Date(timeIntervalSinceNow: oldGhostsTimeInterval)
+    func cleanupOldGhosts(_ oldestTimestamp: Date) {
         do {
             try WanderingGhost.makeQuery()
                 .filter("timestamp", .lessThan, oldestTimestamp)
