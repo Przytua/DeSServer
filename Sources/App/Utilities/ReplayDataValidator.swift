@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import gzip
 
 class ReplayDataValidator {
     
     func validate(replayData: String) -> Bool {
         guard let decoded = Data(base64Encoded: replayData, options: .ignoreUnknownCharacters),
-            let uncompressed = try? decoded.gunzipped() else {
-                return false
+              let uncompressed = try? decoded.gzipUncompressed() else {
+            return false
         }
         var posCount: UInt32 = uncompressed[0...3].withUnsafeBytes { $0.pointee }
         posCount = UInt32(bigEndian: posCount)

@@ -7,7 +7,6 @@
 
 import Vapor
 import Foundation
-import Gzip
 
 class GhostsController {
     

@@ -110,15 +110,6 @@
         }
       },
       {
-        "package": "Gzip",
-        "repositoryURL": "https://github.com/1024jp/GzipSwift.git",
-        "state": {
-          "branch": null,
-          "revision": "377e8bff2a7c99fb5a588dec351334efa3fd0b94",
-          "version": "4.0.4"
-        }
-      },
-      {
         "package": "JSON",
         "repositoryURL": "https://github.com/vapor/json.git",
         "state": {
@@ -242,6 +233,24 @@
           "branch": null,
           "revision": "9ea2ca524f05e97c599ece90da504ac3f7e26d77",
           "version": "2.4.4"
+        }
+      },
+      {
+        "package": "gzip",
+        "repositoryURL": "https://github.com/Zewo/gzip.git",
+        "state": {
+          "branch": null,
+          "revision": "bf9860ba56f15b84c296a7022faa3ba38fa3e467",
+          "version": "0.8.0"
+        }
+      },
+      {
+        "package": "zlib",
+        "repositoryURL": "https://github.com/Zewo/zlib.git",
+        "state": {
+          "branch": null,
+          "revision": "4967a680a4e8cfbf167332dee7f0ec1043fd3b04",
+          "version": "0.4.0"
         }
       }
     ]
