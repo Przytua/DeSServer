@@ -1,22 +1,23 @@
 import Vapor
 import Foundation
 
-let serverAddress = "http://212.71.239.147:18667" //SoulsServerConfiguration.usServerAddress
-let pageSize = 100
-
 extension Droplet {
     
     func setupRoutes() throws {
         let logsViewController = LogsViewController(viewRenderer: view)
-        let redirectController = RedirectController(client: client, log: log)
         let infoController = InfoController()
-        let loginController = LoginController(redirectController: redirectController)
-        let playersController = PlayersController(redirectController: redirectController)
-        let worldTendencyController = WorldTendencyController(redirectController: redirectController)
-        let messagesController = MessagesController(redirectController: redirectController, playersController: playersController)
-        let ghostsController = GhostsController(redirectController: redirectController, log: log)
-        let replayController = ReplayController(redirectController: redirectController, log: log)
-        let sosController = SOSController(redirectController: redirectController, log: log)
+        let loginController = LoginController(log: log)
+        let playersController = PlayersController(log: log)
+        let worldTendencyController = WorldTendencyController(log: log)
+        let messagesController = MessagesController(log: log, playersController: playersController)
+        let ghostsController = GhostsController(log: log)
+        let replayController = ReplayController(log: log)
+        let sosController = SOSController(log: log)
+        let unknownPathsController = UnknownPathsController(log: log)
+        
+        get("favicon.ico") { req in
+            return try Response(filePath: "\(self.config.publicDir)/favicon.ico")
+        }
         
         get("/", handler: logsViewController.logsRedirect)
         try resource("requestLogs", RequestLogController.self)
@@ -24,11 +25,6 @@ extension Droplet {
         get("logs", ":page", handler: logsViewController.logs)
         
         try resource("serverSettings", ServerSettingController.self)
-        
-        all("*", handler: redirectController.redirect)
-        get("favicon.ico") { req in
-            return try Response(filePath: "\(self.config.publicDir)/favicon.ico")
-        }
         
         all("demons-souls-eu/ss.info", handler: infoController.eu)
         all("demons-souls-asia/ss.info", handler: infoController.jp)
@@ -65,6 +61,11 @@ extension Droplet {
         all("cgi-bin/summonOtherCharacter.spd", handler: sosController.summonOtherCharacter)
         all("cgi-bin/summonBlackGhost.spd", handler: sosController.summonBlackGhost)
         all("cgi-bin/outOfBlock.spd", handler: sosController.outOfBlock)
+        
+        all("cgi-bin/getAgreement.spd", handler: unknownPathsController.unimplemented)
+        all("cgi-bin/addNewAccount.spd", handler: unknownPathsController.unimplemented)
+        
+        all("*", handler: unknownPathsController.unknown)
     }
 }
 

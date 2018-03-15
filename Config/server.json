@@ -4,7 +4,7 @@
     "//": "If there is no value there, it will fallback to '8080'",
     "port": "$PORT:18000",
     
-    "host": "0.0.0.0",
+    "host": "$HOST:0.0.0.0",
     
     "//": "It's very rare that a server manages its own TLS.",
     "//": "More commonly, vapor is served behind a proxy like nginx.",

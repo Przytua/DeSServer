@@ -10,18 +10,16 @@ import Foundation
 class PlayersController {
     
     let decryptor = Decryptor()
-    let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
+    let log: LogProtocol
     
     let gradeNames = [Player.Keys.gradeS, Player.Keys.gradeA, Player.Keys.gradeB, Player.Keys.gradeC, Player.Keys.gradeD]
     
-    init(redirectController: RedirectController) {
-        self.redirectController = redirectController
+    init(log: LogProtocol) {
+        self.log = log
     }
     
     func initializeCharacter(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -46,8 +44,6 @@ class PlayersController {
     }
     
     func getMultiPlayGrade(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -72,8 +68,6 @@ class PlayersController {
     }
     
     func getBloodMessageGrade(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -93,8 +87,6 @@ class PlayersController {
     }
     
     func initializeMultiPlay(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
             let requestData = decryptor.decrypt(body) else {
                 return Response(status: .badRequest)
@@ -111,8 +103,6 @@ class PlayersController {
     }
     
     func finalizeMultiPlay(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
             let requestData = decryptor.decrypt(body) else {
                 return Response(status: .badRequest)
@@ -134,8 +124,6 @@ class PlayersController {
     }
     
     func updateOtherPlayerGrade(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)

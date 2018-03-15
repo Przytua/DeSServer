@@ -10,11 +10,11 @@ import Foundation
 
 class LoginController {
     
-    let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
+    let log: LogProtocol
     
-    init(redirectController: RedirectController) {
-        self.redirectController = redirectController
+    init(log: LogProtocol) {
+        self.log = log
     }
     
     enum LoginStatus: UInt8 {
@@ -28,8 +28,6 @@ class LoginController {
     }
     
     func login(_ request: Request) -> Response {
-        _ = redirectController.redirect(request)
-        
         let messages = ["Custom message"]
         let messagesCount = UInt8(messages.count)
         
@@ -49,8 +47,6 @@ class LoginController {
     }
     
     func getTimeMessage(_ request: Request) -> Response {
-        _ = redirectController.redirect(request)
-        
         return self.responseBuilder.response(command: 0x01, body: Data(bytes: [TimeMessageStatus.ok.rawValue, 0, 0]))
     }
 }

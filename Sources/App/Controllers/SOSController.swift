@@ -10,21 +10,17 @@ import Foundation
 class SOSController {
     
     let decryptor = Decryptor()
-    let redirectController: RedirectController
     let responseBuilder = ResponseBuilder()
     let log: LogProtocol
     let serverSettings = ServerSettings()
     
     var openRooms: [String: String] = [:]
     
-    init(redirectController: RedirectController, log: LogProtocol) {
-        self.redirectController = redirectController
+    init(log: LogProtocol) {
         self.log = log
     }
     
     func addSosData(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         let port = Int(request.uri.port!)
         
         guard let body = request.body.bytes,
@@ -48,8 +44,6 @@ class SOSController {
     }
     
     func getSosData(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         let oldestTimestamp = Date(timeIntervalSinceNow: -30)
         let port = Int(request.uri.port!)
         
@@ -113,8 +107,6 @@ class SOSController {
     }
     
     func checkSosData(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         let port = Int(request.uri.port!)
         
         guard let body = request.body.bytes,
@@ -143,8 +135,6 @@ class SOSController {
     }
     
     func summonOtherCharacter(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
@@ -166,8 +156,6 @@ class SOSController {
     }
     
     func summonBlackGhost(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         let oldestTimestamp = Date(timeIntervalSinceNow: -30)
         let port = Int(request.uri.port!)
         
@@ -197,8 +185,6 @@ class SOSController {
     }
     
     func outOfBlock(_ request: Request) throws -> Response {
-        _ = redirectController.redirect(request)
-        
         guard let body = request.body.bytes,
               let requestData = decryptor.decrypt(body) else {
             return Response(status: .badRequest)
