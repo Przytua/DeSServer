@@ -131,6 +131,7 @@ class SOSController {
               let roomIDData = roomID.data(using: .utf8) else {
             return responseBuilder.response(command: 0x0b, body: Data(bytes: [0x01]))
         }
+        openRooms.removeValue(forKey: characterID)
         return responseBuilder.response(command: 0x0b, body: roomIDData)
     }
     
