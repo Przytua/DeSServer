@@ -30,5 +30,7 @@ extension Config {
         preparations.append(Player.self)
         preparations.append(ServerSetting.self)
         preparations.append(SOSData.self)
+        
+        preparations.append(DBMigration.self)
     }
 }
