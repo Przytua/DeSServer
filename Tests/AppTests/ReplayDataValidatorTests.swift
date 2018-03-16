@@ -5,10 +5,6 @@ import Sockets
 @testable import Vapor
 @testable import App
 
-/// This file shows an example of testing an
-/// individual controller without initializing
-/// a Droplet.
-
 class ReplayDataValidatorTests: TestCase {
     
     let replayDataValidator = ReplayDataValidator()
@@ -23,9 +19,6 @@ class ReplayDataValidatorTests: TestCase {
 // MARK: Manifest
 
 extension ReplayDataValidatorTests {
-    /// This is a requirement for XCTest on Linux
-    /// to function properly.
-    /// See ./Tests/LinuxMain.swift for examples
     static let allTests = [
         ("testValidate", testValidate),
     ]

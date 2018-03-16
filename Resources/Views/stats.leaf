@@ -1,0 +1,38 @@
+#extend("base")
+
+#export("title") { Server stats }
+
+#export("head") {
+<style>
+table {border: solid 1px; border-collapse: collapse; table-layout: fixed; width: 100%;}
+thead tr th:first-child, tbody tr td:first-child {width: 20px; min-width: 10px; max-width: 30px; text-align: center;}
+table th {border: solid 1px;}
+table td {border: solid 1px; max-width: 20%;  word-wrap: break-word;}
+table td div {max-height: 100px; overflow: scroll;}
+</style>
+}
+
+#export("content") {
+
+<h2>EU players #(euPlayers) total</h2>
+<ul>
+#loop(euBlocksStats, "blockStats") {
+    <li>#(blockStats.block):   #(blockStats.count)</li>
+}
+</ul>
+
+<h2>JP players #(jpPlayers) total</h2>
+<ul>
+#loop(jpBlocksStats, "blockStats") {
+<li>#(blockStats.block):   #(blockStats.count)</li>
+}
+</ul>
+
+<h2>US players #(usPlayers) total</h2>
+<ul>
+#loop(usBlocksStats, "blockStats") {
+<li>#(blockStats.block):   #(blockStats.count)</li>
+}
+</ul>
+
+}

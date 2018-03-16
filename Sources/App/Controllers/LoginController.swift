@@ -11,6 +11,7 @@ import Foundation
 class LoginController {
     
     let responseBuilder = ResponseBuilder()
+    let statsController = StatsController()
     let log: LogProtocol
     
     init(log: LogProtocol) {
@@ -28,7 +29,8 @@ class LoginController {
     }
     
     func login(_ request: Request) -> Response {
-        let messages = ["Custom message"]
+        var messages = ["The true Demon's Souls starts here!"]
+        messages.append(statsController.serverStatusMessage(port: Int(request.uri.port!)))
         let messagesCount = UInt8(messages.count)
         
         var responseData: Data = Data(bytes: [LoginStatus.presentMOTD.rawValue, messagesCount])

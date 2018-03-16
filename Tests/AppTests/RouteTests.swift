@@ -20,7 +20,7 @@ class RouteTests: TestCase {
     func testMain() throws {
         try drop
             .testResponse(to: .get, at: "/")
-            .assertStatus(is: .seeOther)
+            .assertStatus(is: .ok)
     }
     
     func testLogsWithoutPage() throws {
