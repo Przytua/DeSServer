@@ -12,6 +12,7 @@ class LoginController {
     
     let responseBuilder = ResponseBuilder()
     let statsController = StatsController()
+    let serverSettings = ServerSettings()
     let log: LogProtocol
     
     init(log: LogProtocol) {
@@ -29,7 +30,7 @@ class LoginController {
     }
     
     func login(_ request: Request) -> Response {
-        var messages = ["The true Demon's Souls starts here!"]
+        var messages = [serverSettings.welcomeMessage]
         messages.append(statsController.serverStatusMessage(port: Int(request.uri.port!)))
         let messagesCount = UInt8(messages.count)
         
