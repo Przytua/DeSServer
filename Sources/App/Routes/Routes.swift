@@ -4,6 +4,7 @@ import Foundation
 extension Droplet {
     
     func setupRoutes() throws {
+        let statsViewController = StatsViewController(viewRenderer: view)
         let logsViewController = LogsViewController(viewRenderer: view)
         let infoController = InfoController(config: config)
         let loginController = LoginController(log: log)
@@ -19,7 +20,8 @@ extension Droplet {
             return try Response(filePath: "\(self.config.publicDir)/favicon.ico")
         }
         
-        get("/", handler: logsViewController.logsRedirect)
+        get("/", handler: statsViewController.stats)
+        
         try resource("requestLogs", RequestLogController.self)
         get("logs", handler: logsViewController.logsRedirect)
         get("logs", ":page", handler: logsViewController.logs)
