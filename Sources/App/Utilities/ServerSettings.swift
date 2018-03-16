@@ -15,6 +15,25 @@ class ServerSettings {
         static let welcomeMessage = "welcomeMessage"
     }
     
+    private var _welcomeMessage: String?
+    var welcomeMessage: String {
+        get {
+            if let welcomeMessage = _welcomeMessage {
+                return welcomeMessage
+            }
+            guard let welcomeMessageValue = value(forKey: ServerSettings.Keys.welcomeMessage) else {
+                _welcomeMessage = "The true Demon's Souls starts here!"
+                return _welcomeMessage!
+            }
+            _welcomeMessage = welcomeMessageValue
+            return _welcomeMessage!
+        }
+        set {
+            _welcomeMessage = newValue
+            set(value: newValue, forKey: ServerSettings.Keys.welcomeMessage)
+        }
+    }
+    
     private var _worldTendency: Data?
     var worldTendency: Data {
         get {
