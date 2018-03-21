@@ -64,13 +64,11 @@ class SOSController {
         var knownSOS: [UInt32] = []
         var newSOS: [SOSData] = []
         
-        var query = try SOSData.makeQuery()
-            .filter("blockID", .equals, blockID)
-            .filter("timestamp", .greaterThanOrEquals, oldestTimestamp)
-        if (!serverSettings.crossRegionMatchmaking) {
-            query = try query.filter("port", .equals, port)
-        }
-        guard let activeSOS = try? query.limit(limit).all() else {
+        guard let activeSOS = try? SOSData.makeQuery()
+              .filter("blockID", .equals, blockID)
+              .filter("timestamp", .greaterThanOrEquals, oldestTimestamp)
+              .filter("port", .equals, port)
+              .limit(limit).all() else {
             return responseBuilder.response(command: 0x11, body: toData(from: UInt32(0)))
         }
         
@@ -170,14 +168,12 @@ class SOSController {
             return Response(status: .badRequest)
         }
         
-        var query = try SOSData.makeQuery()
-            .filter("blockID", .greaterThanOrEquals, 40000)
-            .filter("blockID", .lessThan, 50000)
-            .filter("timestamp", .greaterThanOrEquals, oldestTimestamp)
-        if (!serverSettings.crossRegionMatchmaking) {
-            query = try query.filter("port", .equals, port)
-        }
-        guard let sos = try query.first() else {
+        guard let sos = try SOSData.makeQuery()
+              .filter("blockID", .greaterThanOrEquals, 40000)
+              .filter("blockID", .lessThan, 50000)
+              .filter("timestamp", .greaterThanOrEquals, oldestTimestamp)
+              .filter("port", .equals, port)
+              .first() else {
             return responseBuilder.response(command: 0x23, body: Data(bytes: [0x00]))
         }
         openRooms[sos.characterID] = roomID

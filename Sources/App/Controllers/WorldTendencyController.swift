@@ -35,8 +35,7 @@ class WorldTendencyController {
     }
     
     func getQWCData(_ request: Request) throws -> Response {
-        let staticTendency = serverSettings.worldTendency
-        if staticTendency.count > 0 {
+        if let staticTendency = serverSettings.worldTendency {
             return responseBuilder.response(command: 0x0e, body: staticTendency)
         }
         

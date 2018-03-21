@@ -11,66 +11,35 @@ class ServerSettings {
     
     struct Keys {
         static let worldTendency = "worldTendency"
-        static let crossRegionMatchmaking = "crossRegionMatchmaking"
         static let welcomeMessage = "welcomeMessage"
     }
     
     private var _welcomeMessage: String?
     var welcomeMessage: String {
         get {
-            if let welcomeMessage = _welcomeMessage {
-                return welcomeMessage
-            }
             guard let welcomeMessageValue = value(forKey: ServerSettings.Keys.welcomeMessage) else {
-                _welcomeMessage = "The true Demon's Souls starts here!"
-                return _welcomeMessage!
+                return "The true Demon's Souls starts here!"
             }
-            _welcomeMessage = welcomeMessageValue
-            return _welcomeMessage!
+            return welcomeMessageValue
         }
         set {
-            _welcomeMessage = newValue
             set(value: newValue, forKey: ServerSettings.Keys.welcomeMessage)
         }
     }
     
-    private var _worldTendency: Data?
-    var worldTendency: Data {
+    var worldTendency: Data? {
         get {
-            if let worldTendency = _worldTendency {
-                return worldTendency
+            guard let worldTendencyValue = value(forKey: ServerSettings.Keys.worldTendency),
+            let worldTendency = Data(base64Encoded: worldTendencyValue) else {
+                return nil
             }
-            guard let worldTendencyValue = value(forKey: ServerSettings.Keys.worldTendency) else {
-                _worldTendency = Data()
-                return _worldTendency!
-            }
-            _worldTendency = Data(base64Encoded: worldTendencyValue)
-            return _worldTendency!
+            return worldTendency
         }
         set {
-            _worldTendency = newValue
-            let newWorldTendencyValue = newValue.base64EncodedString()
+            guard let newWorldTendencyValue = newValue?.base64EncodedString() else {
+                return
+            }
             set(value: newWorldTendencyValue, forKey: ServerSettings.Keys.worldTendency)
-        }
-    }
-    
-    private var _crossRegionMatchmaking: Bool?
-    var crossRegionMatchmaking: Bool {
-        get {
-            if let crossRegionMatchmaking = _crossRegionMatchmaking {
-                return crossRegionMatchmaking
-            }
-            guard let crossRegionMatchmakingValue = value(forKey: ServerSettings.Keys.crossRegionMatchmaking) else {
-                _crossRegionMatchmaking = false
-                return _crossRegionMatchmaking!
-            }
-            _crossRegionMatchmaking = Bool(crossRegionMatchmakingValue)!
-            return _crossRegionMatchmaking!
-        }
-        set {
-            _crossRegionMatchmaking = newValue
-            let newCrossRegionMatchmakingValue = newValue.string
-            set(value: newCrossRegionMatchmakingValue, forKey: ServerSettings.Keys.crossRegionMatchmaking)
         }
     }
     
